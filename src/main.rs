@@ -117,7 +117,3 @@ fn draw_changeable_items(id_level: i32, mut d: RaylibDrawHandle) -> RaylibDrawHa
 
     return d;
 }
-
-fn btn1_function(mut d: RaylibDrawHandle) {
-    
-}
