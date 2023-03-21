@@ -19,3 +19,7 @@ these photos are the list of what all the versions look like..
 ## version 1
 
 ![Version 1](media/version1.png)
+
+## version 2
+
+![Alt text](media/version2.png)
