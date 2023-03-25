@@ -3,11 +3,13 @@ use std::process::exit;
 
 use std::time::Duration;
 use std::thread::sleep;
+use chrono::{Local};
 
 mod execution_mod;
 
 
 fn main() {
+    let version = "1.0.0";
     let mut changeable_draw_items_id: i32 = 0;
     let (mut rl, thread) = raylib::init()
         .size(1920, 1080)
@@ -21,19 +23,8 @@ fn main() {
     .load_texture(&thread, "/home/messycode/codef/rust/mass/src/images/massLogo.png")
     .expect("Failed to load texture");
 
-
-    // unsafe {
-    //     let messy_arch_os_logo = LoadImage("src/images/messyarchlogo.png")
-    // }
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
-
-        // draw an image src/images/massLogo.png
-
-
-
-
-
         // PADING 10
 
         d.clear_background(Color::from_hex("181818").unwrap());
@@ -75,6 +66,25 @@ fn main() {
             1.5,
             Color::WHITE,
         );
+        // time under the picture
+
+        let formatted_time = Local::now().format("%H:%M:%S").to_string();
+        d.draw_text(
+            &format!("Time: {}", formatted_time),
+            1586,
+            500 - 40,
+            40,
+            Color::WHITE,
+        );
+
+        d.draw_text(
+            &format!("Version:  {}", version),
+            1586,
+            500 - 40 + 40,
+            40,
+            Color::WHITE,
+        );
+        
         d = draw_changeable_items(changeable_draw_items_id, d);
 
         if d.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
