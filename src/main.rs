@@ -1,9 +1,10 @@
 use raylib::{prelude::*};
 use std::process::exit;
-use std::{thread};
 
 use std::time::Duration;
 use std::thread::sleep;
+
+mod execution_mod;
 
 
 fn main() {
@@ -16,11 +17,22 @@ fn main() {
     rl.toggle_fullscreen();
     rl.set_target_fps(60);
 
+    let mass_logo = rl
+    .load_texture(&thread, "/home/messycode/codef/rust/mass/src/images/massLogo.png")
+    .expect("Failed to load texture");
+
+
     // unsafe {
     //     let messy_arch_os_logo = LoadImage("src/images/messyarchlogo.png")
     // }
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
+
+        // draw an image src/images/massLogo.png
+
+
+
+
 
         // PADING 10
 
@@ -39,20 +51,30 @@ fn main() {
         d.draw_text("Just open programs then start desktop", 12, 250, 20, Color::WHITE);
 
         d.draw_rectangle(10, 290, 500, 200, Color::from_hex("5865F2").unwrap());
-        d.draw_text("Discord", 21, 290, 60, Color::BLACK);
+        d.draw_text("Discord", 21, 290, 60, Color::WHITE);
 
         d.draw_rectangle(520, 290, 500, 200, Color::from_hex("1CCA5A").unwrap());
         d.draw_text("Spotify", 531, 290, 60, Color::BLACK);
 
         d.draw_rectangle(1030, 290, 500, 200, Color::from_hex("DC8623").unwrap());
         d.draw_text("Terminal", 1041, 290, 60, Color::BLACK);
-        /*TODO: 
-            ADD open just webrowser
-            ADD open just discord
-            ADD open just spotify
-            ADD open just terminal
-        */
 
+        d.draw_rectangle(10, 500, 500, 200, Color::from_hex("F2C94C").unwrap());
+        d.draw_text("Browser", 21, 500, 60, Color::BLACK);
+
+        d.draw_rectangle(520, 500, 500, 200, Color::from_hex("144376").unwrap());
+        d.draw_text("Steam", 531, 500, 60, Color::WHITE);
+
+
+
+        // d.draw_texture(&massLogo, 1920 - 300, 10, Color::WHITE);
+        d.draw_texture_ex(
+            &mass_logo,
+            Vector2::new(1586.0, 40.0),
+            0.0,
+            1.5,
+            Color::WHITE,
+        );
         d = draw_changeable_items(changeable_draw_items_id, d);
 
         if d.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
@@ -68,20 +90,8 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN1:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
 
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
-                });
-                changeable_draw_items_id = 1;
+                changeable_draw_items_id = execution_mod::desktop_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(2));
@@ -94,46 +104,8 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
-                    
-                    // Start opening flatpak programs
-                    // flatpak run com.discordapp.Discord
-                    std::process::Command::new("flatpak")
-                    .arg("run")
-                    .arg("com.discordapp.Discord")
-                    .spawn()
-                    .expect("something went wrong starting discord");
-                    
-                    //com.spotify.Client
-                    std::process::Command::new("flatpak")
-                    .arg("run")
-                    .arg("com.spotify.Client")
-                    .spawn()
-                    .expect("something went wrong starting spotify");
-
-                    std::process::Command::new("com.google.ChromeDev")
-                    .spawn()
-                    .expect("something went wrong starting chrome");
-
-                    std::process::Command::new("alacritty")
-                    .arg("--working-directory")
-                    .arg("~")
-                    .spawn()
-                    .expect("something went wrong starting alacritty");
-
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
-                });
-                // start here
-                changeable_draw_items_id = 2;
+                
+                changeable_draw_items_id = execution_mod::open_all_main_program_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(5));
@@ -146,31 +118,8 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
 
-                    std::process::Command::new("com.google.ChromeDev")
-                    .spawn()
-                    .expect("something went wrong starting chrome");
-
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
-
-                    std::process::Command::new("flatpak")
-                    .arg("run")
-                    .arg("com.discordapp.Discord")
-                    .spawn()
-                    .expect("something went wrong starting discord");
-                });
-
-                changeable_draw_items_id = 3;
+                changeable_draw_items_id = execution_mod::discord_browser_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(5));
@@ -183,27 +132,8 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
 
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
-
-                    std::process::Command::new("flatpak")
-                    .arg("run")
-                    .arg("com.discordapp.Discord")
-                    .spawn()
-                    .expect("something went wrong starting discord");
-                });
-
-                changeable_draw_items_id = 4;
+                changeable_draw_items_id = execution_mod::discord_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(3));
@@ -216,28 +146,9 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
 
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
 
-                    //com.spotify.Client
-                    std::process::Command::new("flatpak")
-                    .arg("run")
-                    .arg("com.spotify.Client")
-                    .spawn()
-                    .expect("something went wrong starting spotify");
-                });
-
-                changeable_draw_items_id = 5;
+                changeable_draw_items_id = execution_mod::spotify_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(3));
@@ -250,27 +161,39 @@ fn main() {
               d.get_mouse_y() >= btn1_cords[2]  && 
               d.get_mouse_y() <= btn1_cords[3] {
                 println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
-                thread::spawn(|| {
-                    std::process::Command::new("vlc")
-                    .arg("/usr/share/sounds/Kopete_Sent.ogg")
-                    .arg("--play-and-exit")
-                    .arg("-Irc")
-                    .status()
-                    .expect("Something Failed!!!");
 
-                    std::process::Command::new("ulauncher")
-                    .arg("--no-window")
-                    .spawn()
-                    .expect("something went wrong starting ulauncher");
 
-                    std::process::Command::new("alacritty")
-                    .arg("--working-directory")
-                    .arg("~")
-                    .spawn()
-                    .expect("something went wrong starting alacritty");
-                });
+                changeable_draw_items_id = execution_mod::alacritty_exit();
+                draw_changeable_items(changeable_draw_items_id, d);
 
-                changeable_draw_items_id = 6;
+                sleep(Duration::from_secs(3));
+                exit(0);
+            }
+
+            let btn1_cords: [i32; 4] = [10, 510, 500, 700];
+            if d.get_mouse_x() >= btn1_cords[0] && 
+              d.get_mouse_x() <= btn1_cords[1]  &&
+              d.get_mouse_y() >= btn1_cords[2]  && 
+              d.get_mouse_y() <= btn1_cords[3] {
+                println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
+
+
+                changeable_draw_items_id = execution_mod::browser_exit();
+                draw_changeable_items(changeable_draw_items_id, d);
+
+                sleep(Duration::from_secs(3));
+                exit(0);
+            }
+
+            let btn1_cords: [i32; 4] = [520, 1020, 500, 700];
+            if d.get_mouse_x() >= btn1_cords[0] && 
+              d.get_mouse_x() <= btn1_cords[1]  &&
+              d.get_mouse_y() >= btn1_cords[2]  && 
+              d.get_mouse_y() <= btn1_cords[3] {
+                println!("\nPressed BTN2:  x:{}  y:{}\n",d.get_mouse_x(), d.get_mouse_y());
+
+
+                changeable_draw_items_id = execution_mod::steam_exit();
                 draw_changeable_items(changeable_draw_items_id, d);
 
                 sleep(Duration::from_secs(3));
@@ -299,6 +222,12 @@ fn draw_changeable_items(id_level: i32, mut d: RaylibDrawHandle) -> RaylibDrawHa
     }
     if id_level == 6 {
         d.draw_text("Starting alacritty.... good day", 10, 1050, 20, Color::WHITE);
+    }
+    if id_level == 7 {
+        d.draw_text("Starting chrome.... good day", 10, 1050, 20, Color::WHITE);
+    }
+    if id_level == 8 {
+        d.draw_text("Starting steam.... good day                --NOTE: steam takes awhile to load", 10, 1050, 20, Color::WHITE);
     }
 
     return d;
